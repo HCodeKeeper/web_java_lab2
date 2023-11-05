@@ -12,9 +12,29 @@ public class Demo {
 	public static void main(String[] args) throws DBException, SQLException {
 		// users  ==> [ivanov petrov obama]
 		// teams  ==> [teamA teamB teamC ]
-		
-		DBManager dbManager = DBManager.getInstance();
 
+		DBManager dbManager = DBManager.getInstance();
+		dbManager.deleteAllUsers();
+		dbManager.deleteAllTeams();
+		// Create some test users
+		User user1 = User.createUser("petrov");
+		User user2 = User.createUser("ivanov");
+		User user3 = User.createUser("obama");
+
+		// Create some test teams
+		Team team1 = Team.createTeam("teamA");
+		Team team2 = Team.createTeam("teamB");
+		Team team3 = Team.createTeam("teamC");
+
+		// Insert users
+		dbManager.insertUser(user1);
+		dbManager.insertUser(user2);
+		dbManager.insertUser(user3);
+
+		// Insert teams
+		dbManager.insertTeam(team1);
+		dbManager.insertTeam(team2);
+		dbManager.insertTeam(team3);
 		User userPetrov = dbManager.getUser("petrov");
 		User userIvanov = dbManager.getUser("ivanov");
 		User userObama = dbManager.getUser("obama");
@@ -34,6 +54,9 @@ public class Demo {
 		// teamA
 		// teamA teamB
 		// teamA teamB teamC
+
+		dbManager.deleteAllUsers();
+		dbManager.deleteAllTeams();
 	}
 
 }

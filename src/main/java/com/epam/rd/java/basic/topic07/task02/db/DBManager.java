@@ -20,29 +20,30 @@ public class DBManager {
 	private static final String ASSIGN_TEAMS_SQL = "INSERT INTO users_teams(user_id, team_id) VALUES(?, ?)";
 
 	private static DBManager instance;
-	private String connectionUrl;
+	private String connectionUrl = "jdbc:postgresql://localhost:5432/postgres?user=postgres&password=postgres";
 
 	private DBManager() {
-		try (InputStream input = DBManager.class.getClassLoader().getResourceAsStream(Constants.SETTINGS_FILE)) {
-			Properties prop = new Properties();
-			if (input == null) {
-				throw new IllegalStateException("Sorry, unable to find config.properties");
-			}
-			prop.load(input);
-			connectionUrl = prop.getProperty("connection.url");
-		} catch (Exception ex) {
-			throw new RuntimeException("Error loading properties file", ex);
-		}
+//		try (InputStream input = DBManager.class.getClassLoader().getResourceAsStream(Constants.SETTINGS_FILE)) {
+//			Properties prop = new Properties();
+//			if (input == null) {
+//				throw new IllegalStateException("Sorry, unable to find config.properties");
+//			}
+//			prop.load(input);
+//			connectionUrl = prop.getProperty("connection.url");
+//		} catch (Exception ex) {
+//			throw new RuntimeException("Error loading properties file", ex);
+//		}
 	}
 
-	public static DBManager getInstance() {
+	public static DBManager getInstance() throws SQLException, DBException {
+
 		if (instance == null) {
 			instance = new DBManager();
 		}
 		return instance;
 	}
 
-	private Connection getConnection() throws SQLException {
+	public Connection getConnection() throws SQLException {
 		return DriverManager.getConnection(connectionUrl);
 	}
 
@@ -209,6 +210,24 @@ public class DBManager {
 			}
 		}
 		return teams;
+	}
+
+	public void deleteAllUsers() throws DBException, SQLException {
+		try (Connection connection = getConnection();
+			 Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate("DELETE FROM users");
+		} catch (SQLException e) {
+			throw new SQLException("Cannot delete users", e);
+		}
+	}
+
+	public void deleteAllTeams() throws DBException, SQLException {
+		try (Connection connection = getConnection();
+			 Statement stmt = connection.createStatement()) {
+			stmt.executeUpdate("DELETE FROM teams");
+		} catch (SQLException e) {
+			throw new SQLException("Cannot delete teams", e);
+		}
 	}
 
 }
