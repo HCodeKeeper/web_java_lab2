@@ -2,6 +2,7 @@ package com.epam.rd.java.basic.topic07.task02;
 
 import com.epam.rd.java.basic.topic07.task02.db.*;
 import com.epam.rd.java.basic.topic07.task02.db.entity.*;
+import com.epam.rd.java.basic.topic07.task02.entity.User;
 
 public class Demo {
 

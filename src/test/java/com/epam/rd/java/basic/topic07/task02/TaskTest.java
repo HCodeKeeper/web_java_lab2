@@ -9,9 +9,9 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.*;
 
+import com.epam.rd.java.basic.topic07.task02.entity.User;
 import org.junit.jupiter.api.*;
 
-import com.epam.rd.java.basic.topic07.task02.Demo;
 import com.epam.rd.java.basic.topic07.task02.db.*;
 import com.epam.rd.java.basic.topic07.task02.db.entity.*;
 
@@ -126,8 +126,8 @@ public class TaskTest {
 
 	@Test
 	void test1() {
-		User user = User.createUser("testUser");
-		User user2 = User.createUser("testUser");
+		com.epam.rd.java.basic.topic07.task02.entity.User user = com.epam.rd.java.basic.topic07.task02.entity.User.createUser("testUser");
+		com.epam.rd.java.basic.topic07.task02.entity.User user2 = com.epam.rd.java.basic.topic07.task02.entity.User.createUser("testUser");
 		assertEquals("testUser",  user.getLogin());
 		assertTrue(user.equals(user2), "Two users must be equaled if their logins are equaled");
 	}
@@ -142,8 +142,8 @@ public class TaskTest {
 
 	@Test
 	void test3() throws DBException {
-		List<User> users = createAndInsertUsers(1, 5);
-		List<User> usersFromDB = sort(dbm.findAllUsers(), User::getLogin);
+		List<com.epam.rd.java.basic.topic07.task02.entity.User> users = createAndInsertUsers(1, 5);
+		List<com.epam.rd.java.basic.topic07.task02.entity.User> usersFromDB = sort(dbm.findAllUsers(), com.epam.rd.java.basic.topic07.task02.entity.User::getLogin);
 		assertEquals(users, usersFromDB);
 	}
 
@@ -157,7 +157,7 @@ public class TaskTest {
 
 	@Test
 	void test5() throws DBException {
-		List<User> users = createAndInsertUsers(0, 5);
+		List<com.epam.rd.java.basic.topic07.task02.entity.User> users = createAndInsertUsers(0, 5);
 		List<Team> teams = createAndInsertTeams(0, 5);
 		for (int j = 0; j < 5; j++) {
 			dbm.setTeamsForUser(users.get(j), teams.subList(0, j + 1).toArray(Team[]::new));
@@ -191,11 +191,11 @@ public class TaskTest {
 		return teams;
 	}
 
-	private List<User> createAndInsertUsers(int from, int to) throws DBException {
+	private List<com.epam.rd.java.basic.topic07.task02.entity.User> createAndInsertUsers(int from, int to) throws DBException {
 		DBManager dbm = DBManager.getInstance();
-		List<User> users = IntStream.range(from, to)
+		List<com.epam.rd.java.basic.topic07.task02.entity.User> users = IntStream.range(from, to)
 			.mapToObj(x -> "user" + x)
-			.map(User::createUser)
+			.map(com.epam.rd.java.basic.topic07.task02.entity.User::createUser)
 			.collect(Collectors.toList());
 
 		for (User user : users) {
