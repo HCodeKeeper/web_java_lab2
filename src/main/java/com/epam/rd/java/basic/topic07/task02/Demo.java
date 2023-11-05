@@ -1,12 +1,15 @@
 package com.epam.rd.java.basic.topic07.task02;
 
-import com.epam.rd.java.basic.topic07.task02.db.*;
-import com.epam.rd.java.basic.topic07.task02.db.entity.*;
-import com.epam.rd.java.basic.topic07.task02.entity.User;
+import com.epam.rd.java.basic.topic07.task02.db.DBException;
+import com.epam.rd.java.basic.topic07.task02.db.DBManager;
+import com.epam.rd.java.basic.topic07.task02.db.entity.Team;
+import com.epam.rd.java.basic.topic07.task02.db.entity.User;
+
+import java.sql.SQLException;
 
 public class Demo {
 
-	public static void main(String[] args) throws DBException {
+	public static void main(String[] args) throws DBException, SQLException {
 		// users  ==> [ivanov petrov obama]
 		// teams  ==> [teamA teamB teamC ]
 		
