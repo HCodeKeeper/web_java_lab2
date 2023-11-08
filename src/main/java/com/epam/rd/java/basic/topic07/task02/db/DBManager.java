@@ -1,15 +1,12 @@
 package com.epam.rd.java.basic.topic07.task02.db;
 
 
-import com.epam.rd.java.basic.topic07.task02.Constants;
 import com.epam.rd.java.basic.topic07.task02.db.entity.Team;
 import com.epam.rd.java.basic.topic07.task02.db.entity.User;
 
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
 public class DBManager {
 
@@ -35,7 +32,7 @@ public class DBManager {
 //		}
 	}
 
-	public static DBManager getInstance() throws SQLException, DBException {
+	public static DBManager getInstance() {
 
 		if (instance == null) {
 			instance = new DBManager();
@@ -43,11 +40,16 @@ public class DBManager {
 		return instance;
 	}
 
-	public Connection getConnection() throws SQLException {
-		return DriverManager.getConnection(connectionUrl);
+	public Connection getConnection() throws DBException {
+		try {
+			return DriverManager.getConnection(connectionUrl);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	public void insertUser(User user) throws SQLException {
+	public void insertUser(User user) throws DBException {
 		try (Connection connection = getConnection();
 			 PreparedStatement ps = connection.prepareStatement(INSERT_USER_SQL, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setString(1, user.getLogin());
@@ -62,10 +64,12 @@ public class DBManager {
 					throw new SQLException("Creating user failed, no ID obtained.");
 				}
 			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
 		}
 	}
 
-	public List<User> findAllUsers() throws SQLException {
+	public List<User> findAllUsers() throws DBException {
 		List<User> users = new ArrayList<>();
 		try (Connection connection = getConnection();
 			 PreparedStatement ps = connection.prepareStatement(FIND_ALL_USERS_SQL);
@@ -75,11 +79,13 @@ public class DBManager {
 				user.setId(rs.getInt("id"));
 				users.add(user);
 			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
 		}
 		return users;
 	}
 
-	public void insertTeam(Team team) throws SQLException {
+	public void insertTeam(Team team) throws DBException {
 		try (Connection connection = getConnection();
 			 PreparedStatement ps = connection.prepareStatement(INSERT_TEAM_SQL, Statement.RETURN_GENERATED_KEYS)) {
 			ps.setString(1, team.getName());
@@ -94,10 +100,12 @@ public class DBManager {
 					throw new SQLException("Creating team failed, no ID obtained.");
 				}
 			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
 		}
 	}
 
-	public List<Team> findAllTeams() throws SQLException {
+	public List<Team> findAllTeams() throws DBException {
 		List<Team> teams = new ArrayList<>();
 		try (Connection connection = getConnection();
 			 PreparedStatement ps = connection.prepareStatement(FIND_ALL_TEAMS_SQL);
@@ -107,11 +115,13 @@ public class DBManager {
 				team.setId(rs.getInt("id"));
 				teams.add(team);
 			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
 		}
 		return teams;
 	}
 
-	public void setTeamsForUser(User user, Team... teams) throws SQLException {
+	public void setTeamsForUser(User user, Team... teams) throws DBException {
 		Connection connection = null;
 		PreparedStatement psInsertUT = null;
 		try {
@@ -143,7 +153,11 @@ public class DBManager {
 					ex.printStackTrace();
 				}
 			}
-			throw e; // Re-throw the exception to be handled elsewhere
+			try {
+				throw e; // Re-throw the exception to be handled elsewhere
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
 		} finally {
 			if (psInsertUT != null) {
 				try {
@@ -163,7 +177,7 @@ public class DBManager {
 		}
 	}
 
-	public User getUser(String login) throws SQLException {
+	public User getUser(String login) throws DBException {
 		User user = null;
 		try (Connection connection = getConnection();
 			 PreparedStatement ps = connection.prepareStatement("SELECT * FROM users WHERE login = ?")) {
@@ -174,11 +188,13 @@ public class DBManager {
 					user.setId(rs.getInt("id"));
 				}
 			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
 		}
 		return user;
 	}
 
-	public Team getTeam(String name) throws SQLException {
+	public Team getTeam(String name) throws DBException {
 		Team team = null;
 		try (Connection connection = getConnection();
 			 PreparedStatement ps = connection.prepareStatement("SELECT * FROM teams WHERE name = ?")) {
@@ -189,11 +205,13 @@ public class DBManager {
 					team.setId(rs.getInt("id"));
 				}
 			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
 		}
 		return team;
 	}
 
-	public List<Team> getUserTeams(User user) throws SQLException {
+	public List<Team> getUserTeams(User user) throws DBException {
 		List<Team> teams = new ArrayList<>();
 		try (Connection connection = getConnection();
 			 PreparedStatement ps = connection.prepareStatement(
@@ -207,7 +225,11 @@ public class DBManager {
 					team.setId(rs.getInt("id"));
 					teams.add(team);
 				}
+			} catch (SQLException throwables) {
+				throwables.printStackTrace();
 			}
+		} catch (SQLException throwables) {
+			throwables.printStackTrace();
 		}
 		return teams;
 	}

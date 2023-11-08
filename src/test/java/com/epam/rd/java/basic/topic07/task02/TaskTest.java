@@ -85,7 +85,7 @@ public class TaskTest {
 	private DBManager dbm;
 
 	@BeforeEach
-	void setUp() throws SQLException, DBException {
+	void setUp() throws SQLException {
 		dbm = DBManager.getInstance();
 
 		con.createStatement().executeUpdate(CREATE_USERS_TABLE);
@@ -141,14 +141,14 @@ public class TaskTest {
 	}
 
 	@Test
-	void test3() throws DBException, SQLException {
+	void test3() throws DBException {
 		List<User> users = createAndInsertUsers(1, 5);
 		List<User> usersFromDB = sort(dbm.findAllUsers(), User::getLogin);
 		assertEquals(users, usersFromDB);
 	}
 
 	@Test
-	void test4() throws DBException, SQLException {
+	void test4() throws DBException {
 		List<Team> teams = createAndInsertTeams(1, 5);
 		List<Team> teamsFromDB = sort(dbm.findAllTeams(), Team::getName);
 
@@ -156,7 +156,7 @@ public class TaskTest {
 	}
 
 	@Test
-	void test5() throws DBException, SQLException {
+	void test5() throws DBException {
 		List<User> users = createAndInsertUsers(0, 5);
 		List<Team> teams = createAndInsertTeams(0, 5);
 		for (int j = 0; j < 5; j++) {
@@ -178,7 +178,7 @@ public class TaskTest {
 		return items;
 	}
 
-	private List<Team> createAndInsertTeams(int from, int to) throws DBException, SQLException {
+	private List<Team> createAndInsertTeams(int from, int to) throws DBException {
 		DBManager dbm = DBManager.getInstance();
 		List<Team> teams = IntStream.range(from, to)
 				.mapToObj(x -> "team" + x)
@@ -191,7 +191,7 @@ public class TaskTest {
 		return teams;
 	}
 
-	private List<User> createAndInsertUsers(int from, int to) throws DBException, SQLException {
+	private List<User> createAndInsertUsers(int from, int to) throws DBException {
 		DBManager dbm = DBManager.getInstance();
 		List<User> users = IntStream.range(from, to)
 				.mapToObj(x -> "user" + x)
